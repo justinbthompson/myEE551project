@@ -18,3 +18,9 @@ The scope of this project includes: <br />
   * Potentially, other visualization tools will be employed as well
 * Additional goals if achievable may include simulation of a microgrid based on real time demand data
 * Project completion by 04/26/2019 Friday at 5pm ET
+
+## 4/20/2019 Proposal Update <br />
+
+Data will be collected and analyzed from the New York Independent System Operator Real-Time Dashboard (https://www.nyiso.com/real-time-dashboard) by accessing Excel and .zip files available (http://mis.nyiso.com/public/P-63list.htm).
+
+The user of the program will be prompted to choose a either a day or a particular hour of that day. The program will then output the total generated megawatts, percentages of generation between different sources, and other information. 
