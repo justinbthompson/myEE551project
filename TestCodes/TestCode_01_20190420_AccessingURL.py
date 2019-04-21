@@ -1,3 +1,8 @@
+##VOID CODE
+##This code was written to access URL of US Energy Information Administration
+##Project now takes date from New York ISO
+
+
 ##Trial Code 1, Work done 4-20-2019
 ##This code is early trials of forming the URL wanted to reach from the requested date
 
