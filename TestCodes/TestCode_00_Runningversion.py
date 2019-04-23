@@ -1,6 +1,6 @@
 #TestCode_00
 #Running version of final code
-#Last updated 2019-04-22 4:30 PM
+#Last updated 2019-04-23 12:00 PM
 
 
 #--------------------------------------------------------------------------------
@@ -10,18 +10,53 @@ import pandas as pd #Python Data Analysis Library
 from urllib.request import urlopen #To request data from URL
 from io import BytesIO #To obtain zip file from URL
 from zipfile import ZipFile #To open items in zip file
-
-#For now, will choose inputs in python
-inputyear = 2019
-inputmonth = 4
-inputday = 20
-
+import datetime #Will be used to check if inputted day is a real day
 
 #--------------------------------------------------------------------------------
 #Fucntions
 
+def user_input():
+    global inputyear, inputmonth, inputday
+    print("Welcome to the New York State Energy Calculator") #Boot-up message
+    #Select Year
+    x = True
+    while x is True:
+        print("Please enter the year of the day you want to examine \n Choose 2018 or 2019")
+        inputyear = input("yyyy >")
+        if (inputyear == '2018') | (inputyear == '2019'):
+            x = False
+    #Accept Month
+    x = True
+    while x is  True:
+        print("Please enter the month of " + inputyear +" you want to examine \n"
+                "Choose a number between 1 and 12")
+        inputmonth = input("mm >")
+        try:
+            int(x)
+            if int(inputmonth) in range(1,12):
+                x = False
+        except:
+            x = True
+    inputmonth = inputmonth[-2:].zfill(2)
+    x = True
+    while x is True:
+        print("Please enter the date of " + inputyear + '-' + inputmonth + ' you want to examine \n'
+              'Choose an applicable date between 0 and 31 depending on month')
+        inputday = input("dd >")
+        try:
+            int(inputday)
+            try:
+                datetime.datetime(int(inputyear), int(inputmonth), int(inputday))
+                x = False
+            except: x = True
+        except:
+            x = True
+    inputday = inputday[-2:].zfill(2)
+
+
+
 def access_data(): #Access data from NY ISO
-    url = 'http://mis.nyiso.com/public/csv/rtfuelmix/' + str(inputyear)+str(inputmonth).zfill(2)+str(inputday).zfill(2) + 'rtfuelmix.csv'
+    url = 'http://mis.nyiso.com/public/csv/rtfuelmix/' + inputyear+inputmonth+inputday + 'rtfuelmix.csv'
     try:
         urlopen(url) #That date exists as csv file in database
         data = pd.read_csv(url)
@@ -64,12 +99,19 @@ def energy_sum1(): #Find Daily Total Energy Usage, both full and per generation 
     for x in dp: #Find percentage of total energy usage for generation source
         dp[x] = round(100*dt[x]/dt['All Sources'],2)
 
-def energy_sum3():  #Quicker way find Daily Total Energy usage, using pandas library. Not in use.
+def energy_sum2():  #Quicker way find Daily Total Energy usage, using pandas library. Not in use.
                     #Using method with loops and if statements to show concepts learned in this course.
+    global dt, dp
+    dt = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
+          'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
+    dp = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
+          'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
     dt['All Sources'] = data['Gen MW'].sum()
     for x in dt:
         if x != 'All Sources':
             dt[x] = data.loc[data['Fuel Category'] == x, 'Gen MW'].sum()
+    for x in dp: #Find percentage of total energy usage for generation source
+        dp[x] = round(100*dt[x]/dt['All Sources'],2)
 
 def energy_sum_print(): #Print Daily Total Energy Usage, both full and per generation source, and percentage by source
     print('Daily Total Energy Usage for ' + str(inputyear) + '-' + str(inputmonth) + '-' + str(inputday) + ': \n')
@@ -84,6 +126,8 @@ def energy_sum_print(): #Print Daily Total Energy Usage, both full and per gener
 
 #--------------------------------------------------------------------------------
 #Program
+
+user_input()
 data = access_data()
 energy_sum1()
 energy_sum_print()
