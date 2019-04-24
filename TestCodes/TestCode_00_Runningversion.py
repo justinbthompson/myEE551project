@@ -1,6 +1,7 @@
 #TestCode_00
 #Running version of final code
-#Last updated 2019-04-24 11:00 AM
+#Last updated 2019-04-24 12:00 PM
+
 
 
 #--------------------------------------------------------------------------------
@@ -17,7 +18,7 @@ import datetime #Will be used to check if inputted day is a real day
 
 def user_input():
     global inputyear, inputmonth, inputday
-    print("Welcome to the New York State Energy Calculator") #Boot-up message
+    print("Please find a day you want to analyze") #Boot-up message
     #Select Year
     x = True
     while x is True:
@@ -69,69 +70,26 @@ def access_data(): #Access data from NY ISO
     return data
 
 
-def energy_sum1(): #Find Daily Total Energy Usage, both full and per generation source, and percentage by source
-    global dt, dp, data
+def analyze_data(): #Find Daily Total Energy Usage, both full and per generation source, and percentage by source
+    global dt, dp,  peakminute, peakminuteS, peakhour, peakhourS
     #Reset dt and dp for new data set
     dt = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
           'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
     dp = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
           'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
-    i = 0
-    while i < data.shape[0]: #data.shape[0] = number of rows in data, data.shape[1] = number of columns
-        #Total Daily Energy Consumption
-        dt['All Sources'] += data['Gen MW'][i]
-        #Daily Energy Consumption Per Generation Source
-        if data['Fuel Category'][i] == 'Dual Fuel':
-            dt['Dual Fuel'] += data['Gen MW'][i]
-        if data['Fuel Category'][i] == 'Natural Gas':
-            dt['Natural Gas'] += data['Gen MW'][i]
-        if data['Fuel Category'][i] == 'Nuclear':
-            dt['Nuclear'] += data['Gen MW'][i]
-        if data['Fuel Category'][i] == 'Other Fossil Fuels':
-            dt['Other Fossil Fuels'] += data['Gen MW'][i]
-        if data['Fuel Category'][i] == 'Other Renewables':
-            dt['Other Renewables'] += data['Gen MW'][i]
-        if data['Fuel Category'][i] == 'Wind':
-            dt['Wind'] += data['Gen MW'][i]
-        if data['Fuel Category'][i] == 'Hydro':
-            dt['Hydro'] += data['Gen MW'][i]
-        i += 1
-    for x in dp: #Find percentage of total energy usage for generation source
-        dp[x] = round(100*dt[x]/dt['All Sources'],2)
-
-def energy_sum2():  #Quicker way find Daily Total Energy usage, using pandas library. Not in use.
-                    #Using method with loops and if statements to show concepts learned in this course.
-    global dt, dp
-    dt = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
-          'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
-    dp = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
-          'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
-    dt['All Sources'] = data['Gen MW'].sum()
-    for x in dt:
-        if x != 'All Sources':
-            dt[x] = data.loc[data['Fuel Category'] == x, 'Gen MW'].sum()
-    for x in dp: #Find percentage of total energy usage for generation source
-        dp[x] = round(100*dt[x]/dt['All Sources'],2)
-
-def energy_sum_print(): #Print Daily Total Energy Usage, both full and per generation source, and percentage by source
-    print('Daily Total Energy Usage for ' + str(inputyear) + '-' + str(inputmonth) + '-' + str(inputday) + ': \n')
-    print(str(dt['All Sources']) + " MW \n")
-    print('Daily Total Energy Usage Per Energy Source: \n')
-    for x, y in dt.items():
-        if x not in 'Daily Total All Sources':
-            print(x + ": " + str(y) + " MW (" + str(dp[x]) + "%)")
-    print('\nPeak Energy Consumption occurred at ' + peakminuteS + ', with ' + str(peakminute) + ' MW')
-    print('Peak Energy Consumption over an hour occured at hour ' + peakhourS + ', with ' + str(peakhour) + ' MW')
-
-
-def peak():
-    global inputday, inputmonth, inputyear #Need to retrieve this data
-    global peakminute, peakminuteS, peakhour, peakhourS
-    peakhour = 0; peakminute = 0;  i = 0; hourgen = 0; minutegen = 0
+    i = 0; peakhour = 0; peakminute = 0; hourgen = 0; minutegen = 0
     t = data['Time Stamp'][0] #Get first time stamp
     h = t[11:13] #Get first hour
 
-    while i < data.shape[0]:
+    while i < data.shape[0]: #data.shape[0] = number of rows in data, data.shape[1] = number of columns
+
+        #Total Daily Energy Consumption
+        dt['All Sources'] += data['Gen MW'][i]
+
+        #Daily Energy Consumption Per Generation Source
+        for x in dt:
+            if data['Fuel Category'][i] == x:
+                dt[x] += data['Gen MW'][i]
 
         #To find hourly energy consumption
         if h == data['Time Stamp'][i][11:13]:
@@ -157,12 +115,43 @@ def peak():
 
         i += 1
 
+    for x in dp: #Find percentage of total energy usage for generation source
+        dp[x] = round(100*dt[x]/dt['All Sources'],2)
+
+def energy_sum2():  #Quicker way find Daily Total Energy usage, using pandas library. Not in use.
+                    #Using method with loops and if statements to show concepts learned in this course.
+    global dt, dp
+    dt = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
+          'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
+    dp = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
+          'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
+    dt['All Sources'] = data['Gen MW'].sum()
+    for x in dt:
+        if x != 'All Sources':
+            dt[x] = data.loc[data['Fuel Category'] == x, 'Gen MW'].sum()
+    for x in dp: #Find percentage of total energy usage for generation source
+        dp[x] = round(100*dt[x]/dt['All Sources'],2)
+
+def analyzed_data_print(): #Print Daily Total Energy Usage, both full and per generation source, and percentage by source
+    print('Daily Total Energy Usage for ' + str(inputyear) + '-' + str(inputmonth) + '-' + str(inputday) + ': \n')
+    print(str(dt['All Sources']) + " MW \n")
+    print('Daily Total Energy Usage Per Energy Source: \n')
+    for x, y in dt.items():
+        if x not in 'Daily Total All Sources':
+            print(x + ": " + str(y) + " MW (" + str(dp[x]) + "%)")
+    print('\nPeak Energy Consumption occurred at ' + peakminuteS + ', with ' + str(peakminute) + ' MW')
+    print('Peak Energy Consumption over an hour occured at hour ' + peakhourS + ', with ' + str(peakhour) + ' MW')
+
+
 
 #--------------------------------------------------------------------------------
 #Program
 
-user_input()
-data = access_data()
-energy_sum1()
-peak()
-energy_sum_print()
+print("Welcome to the New York State Energy Data Analyzer") #Boot-up message
+while True:
+    user_input()
+    data = access_data()
+    analyze_data()
+    analyzed_data_print()
+    print('')
+
