@@ -1,6 +1,6 @@
 #TestCode_00
 #Running version of final code
-#Last updated 2019-04-23 12:00 PM
+#Last updated 2019-04-24 11:00 AM
 
 
 #--------------------------------------------------------------------------------
@@ -120,8 +120,42 @@ def energy_sum_print(): #Print Daily Total Energy Usage, both full and per gener
     for x, y in dt.items():
         if x not in 'Daily Total All Sources':
             print(x + ": " + str(y) + " MW (" + str(dp[x]) + "%)")
+    print('\nPeak Energy Consumption occurred at ' + peakminuteS + ', with ' + str(peakminute) + ' MW')
+    print('Peak Energy Consumption over an hour occured at hour ' + peakhourS + ', with ' + str(peakhour) + ' MW')
 
 
+def peak():
+    global inputday, inputmonth, inputyear #Need to retrieve this data
+    global peakminute, peakminuteS, peakhour, peakhourS
+    peakhour = 0; peakminute = 0;  i = 0; hourgen = 0; minutegen = 0
+    t = data['Time Stamp'][0] #Get first time stamp
+    h = t[11:13] #Get first hour
+
+    while i < data.shape[0]:
+
+        #To find hourly energy consumption
+        if h == data['Time Stamp'][i][11:13]:
+            hourgen += data['Gen MW'][i]
+        else:
+            h = data['Time Stamp'][i][11:13]
+            hourgen = data['Gen MW'][i]
+
+        #To find minute based energy consumption
+        if data['Time Stamp'][i] == t:
+            minutegen += data['Gen MW'][i]
+        else:
+            t = data['Time Stamp'][i]
+            minutegen = data['Gen MW'][i]
+
+        #Reset peaks if necessary
+        if minutegen > peakminute:
+            peakminute = minutegen
+            peakminuteS = t[11:16]
+        if hourgen > peakhour:
+            peakhour = hourgen
+            peakhourS = h
+
+        i += 1
 
 
 #--------------------------------------------------------------------------------
@@ -130,4 +164,5 @@ def energy_sum_print(): #Print Daily Total Energy Usage, both full and per gener
 user_input()
 data = access_data()
 energy_sum1()
+peak()
 energy_sum_print()
