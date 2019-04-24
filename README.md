@@ -23,4 +23,9 @@ The scope of this project includes: <br />
 
 Data will be collected and analyzed from the New York Independent System Operator Real-Time Dashboard (https://www.nyiso.com/real-time-dashboard) by accessing Excel and .zip files available (http://mis.nyiso.com/public/P-63list.htm).
 
-The user of the program will be prompted to choose a either a day or a particular hour of that day. The program will then output the total generated megawatts, percentages of generation between different sources, and other information. 
+The user of the program will be prompted to choose a day within the past two years. The program will then output the total generated megawatts, percentages of generation between different sources, and other information. 
+
+## Required Installations <br />
+
+External library [pandas](https://pandas.pydata.org/) will need to be installed. This is used to compile CSV file data into an array.
+All other libraries are python libraries. 
