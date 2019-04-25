@@ -9,6 +9,8 @@ I pledge my honor that I have abided by the Stevens Honor System -Justin Thompso
 United States electricity consumption is continuously updated on government and utility websites.
 This program takes data from the New York Independent System Operator [Real-Time Dashboard](https://www.nyiso.com/real-time-dashboard) [archive](http://mis.nyiso.com/public/P-63list.htm) and analyzes it. 
 
+To run, run the program NewYorkStateEnergyConsumptionDataAnalyzer.py
+
 When the program starts, the command window will prompt the user to type in a date. This date will be the date in which data is analyzed, and it will be used to access the data. 
 
 The program will then output: <br />
