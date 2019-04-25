@@ -4,7 +4,7 @@ Justin Thompson <br />
 
 I pledge my honor that I have abided by the Stevens Honor System -Justin Thompson
 
-## 2/15/2019 Introduction <br /> 
+## Introduction <br /> 
 
 United States electricity consumption is continuously updated on government and utility websites.
 This program takes archived data from New York Independent System Operator [Real-Time Dashboard](https://www.nyiso.com/real-time-dashboard) set of archived [data](http://mis.nyiso.com/public/P-63list.htm) and analyzes it. 
