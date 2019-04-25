@@ -21,7 +21,7 @@ An example output is below:
 
 Daily Total Energy Usage for 2019-04-20: 
 
-3601545.0 MW 
+3499585.0 MW 
 
 Daily Total Energy Usage Per Energy Source: 
 
