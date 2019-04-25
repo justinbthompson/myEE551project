@@ -7,7 +7,7 @@ I pledge my honor that I have abided by the Stevens Honor System -Justin Thompso
 ## Introduction <br /> 
 
 United States electricity consumption is continuously updated on government and utility websites.
-This program takes archived data from New York Independent System Operator [Real-Time Dashboard](https://www.nyiso.com/real-time-dashboard) set of archived [data](http://mis.nyiso.com/public/P-63list.htm) and analyzes it. 
+This program takes data from the New York Independent System Operator [Real-Time Dashboard](https://www.nyiso.com/real-time-dashboard) [archive](http://mis.nyiso.com/public/P-63list.htm) and analyzes it. 
 
 When the program starts, the command window will prompt the user to type in a date. This date will be the date in which data is analyzed, and it will be used to access the data. 
 
@@ -25,13 +25,16 @@ Daily Total Energy Usage for 2019-04-24:
 
 Daily Total Energy Usage Per Energy Source: 
 
-Dual Fuel: 565914.0 MW (15.71%)
-Natural Gas: 438544.0 MW (12.18%)
-Nuclear: 1326488.0 MW (36.83%)
-Other Fossil Fuels: 345.0 MW (0.01%)
-Other Renewables: 55312.0 MW (1.54%)
-Wind: 275348.0 MW (7.65%)
-Hydro: 939594.0 MW (26.09%)
+Dual Fuel: 565914.0 MW (15.71%) <br />
+Natural Gas: 438544.0 MW (12.18%) <br />
+Nuclear: 1326488.0 MW (36.83%) <br />
+Other Fossil Fuels: 345.0 MW (0.01%) <br />
+Other Renewables: 55312.0 MW (1.54%) <br />
+Wind: 275348.0 MW (7.65%) <br />
+Hydro: 939594.0 MW (26.09%) <br />
+
+Peak Energy Consumption occurred at 11:06, with 13241.0 MW <br />
+Peak Energy Consumption over an hour occured at hour 20, with 179357.0 MW
 
 ## Requirments <br />
 
