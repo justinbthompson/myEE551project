@@ -1,7 +1,6 @@
 #TestCode_00
 #Running version of final code
-#Last updated 2019-04-24 12:00 PM
-
+#Last updated 2019-04-24 10:30 PM
 
 
 #--------------------------------------------------------------------------------
@@ -16,8 +15,11 @@ import datetime #Will be used to check if inputted day is a real day
 #--------------------------------------------------------------------------------
 #Fucntions
 
+#User input function requests input from user
+#The user will be prompted to specify a year, month, and day
+#This will be the date the user searches data for, and will help make URL link
+#Output of this function will be the date
 def user_input():
-    global inputyear, inputmonth, inputday
     print("Please find a day you want to analyze") #Boot-up message
     #Select Year
     x = True
@@ -26,7 +28,7 @@ def user_input():
         inputyear = input("yyyy >")
         if (inputyear == '2018') | (inputyear == '2019'):
             x = False
-    #Accept Month
+    #Select Month
     x = True
     while x is  True:
         print("Please enter the month of " + inputyear +" you want to examine \n"
@@ -39,6 +41,7 @@ def user_input():
         except:
             x = True
     inputmonth = inputmonth[-2:].zfill(2)
+    #Select day
     x = True
     while x is True:
         print("Please enter the date of " + inputyear + '-' + inputmonth + ' you want to examine \n'
@@ -53,34 +56,49 @@ def user_input():
         except:
             x = True
     inputday = inputday[-2:].zfill(2)
+    return inputyear, inputmonth, inputday
 
 
-
-def access_data(): #Access data from NY ISO
-    url = 'http://mis.nyiso.com/public/csv/rtfuelmix/' + inputyear+inputmonth+inputday + 'rtfuelmix.csv'
+#Access data function takes the date from user_input() to create URL and access the data of that date
+#date[0] = inputyear, date[1] = inputmonth, date[2] = inputday
+#This function outputs the raw data from NY ISO
+def access_data(date):
+    #Create an initial URL based on the input data
+    url = 'http://mis.nyiso.com/public/csv/rtfuelmix/' + date[0]+date[1]+date[2]+ 'rtfuelmix.csv'
+    #Try to see if CSV file of date requested is directly posted on NY ISO database
     try:
-        urlopen(url) #That date exists as csv file in database
-        data = pd.read_csv(url)
-    except: #We need to go through zipfile if that csv file is no longer posted on database
-        filetoread = str(inputyear)+str(inputmonth).zfill(2)+str(inputday).zfill(2) + 'rtfuelmix.csv'
-        url2 = 'http://mis.nyiso.com/public/csv/rtfuelmix/' + str(inputyear)+str(inputmonth).zfill(2) + '01rtfuelmix_csv.zip'
+        urlopen(url) #That date requested has a CSV file directly posted on NY ISO database
+        data = pd.read_csv(url) #Use pandas to collect raw data
+    #If the CSV file of date requested is not directly posted, it will be posted through a monthly zip file
+    #The file will have to be accessed through the URL of the zip file
+    except:
+        filetoread = str(date[0])+str(date[1]).zfill(2)+str(date[2]).zfill(2) + 'rtfuelmix.csv'
+        url2 = 'http://mis.nyiso.com/public/csv/rtfuelmix/' + str(date[0])+str(date[1]).zfill(2) + '01rtfuelmix_csv.zip'
         resp = urlopen(url2)
         zf = ZipFile(BytesIO(resp.read()))
         data = pd.read_csv(zf.open(filetoread))
     return data
 
-
-def analyze_data(): #Find Daily Total Energy Usage, both full and per generation source, and percentage by source
-    global dt, dp,  peakminute, peakminuteS, peakhour, peakhourS
+#Analyze data function is the core of this program
+#Its primary purpose is to input the data from access_data(), analyze it, and print the results
+#This includes finding total daily energy consumption, energy consumption per generation source, percentage by source, and peak times
+#It then outputs a print statement displaying all this information
+#It also takes date as an input to print the date information
+def analyze_data(data, date):
+    #Dictionary dt will be used to match a key of a generation source with a value of its total generation
+    #Dictionary dp will be used to match a key of a generation source with its percentage of total generation
     #Reset dt and dp for new data set
     dt = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
           'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
     dp = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
           'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
+
+    #Loop tracker and peak tracker variables
     i = 0; peakhour = 0; peakminute = 0; hourgen = 0; minutegen = 0
     t = data['Time Stamp'][0] #Get first time stamp
     h = t[11:13] #Get first hour
 
+    #This while loop goes through all the data cells in the chosen CSV files
     while i < data.shape[0]: #data.shape[0] = number of rows in data, data.shape[1] = number of columns
 
         #Total Daily Energy Consumption
@@ -118,9 +136,21 @@ def analyze_data(): #Find Daily Total Energy Usage, both full and per generation
     for x in dp: #Find percentage of total energy usage for generation source
         dp[x] = round(100*dt[x]/dt['All Sources'],2)
 
-def energy_sum2():  #Quicker way find Daily Total Energy usage, using pandas library. Not in use.
-                    #Using method with loops and if statements to show concepts learned in this course.
-    global dt, dp
+    print('Daily Total Energy Usage for ' + str(date[0]) + '-' + str(date[1]) + '-' + str(date[2]) + ': \n')
+    print(str(dt['All Sources']) + " MW \n")
+    print('Daily Total Energy Usage Per Energy Source: \n')
+    for x, y in dt.items():
+        if x not in 'Daily Total All Sources':
+            print(x + ": " + str(y) + " MW (" + str(dp[x]) + "%)")
+    print('\nPeak Energy Consumption occurred at ' + peakminuteS + ', with ' + str(peakminute) + ' MW')
+    print('Peak Energy Consumption over an hour occured at hour ' + peakhourS + ', with ' + str(peakhour) + ' MW')
+
+
+#This function is another way to analyze the data, which is much quicker in computing time.
+#It has similar inputs as outputs as the last, but it uses pandas to analyze data.
+#I chose to use the previous function to show concepts learned in this course.
+#Since it is not in use, it does not have the full functionality as the function above.
+def analyze_data_method2(data, date):
     dt = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
           'Other Fossil Fuels':0, 'Other Renewables':0, 'Wind':0, 'Hydro':0}
     dp = {'All Sources':0,'Dual Fuel':0, 'Natural Gas':0, 'Nuclear': 0,
@@ -131,27 +161,23 @@ def energy_sum2():  #Quicker way find Daily Total Energy usage, using pandas lib
             dt[x] = data.loc[data['Fuel Category'] == x, 'Gen MW'].sum()
     for x in dp: #Find percentage of total energy usage for generation source
         dp[x] = round(100*dt[x]/dt['All Sources'],2)
-
-def analyzed_data_print(): #Print Daily Total Energy Usage, both full and per generation source, and percentage by source
-    print('Daily Total Energy Usage for ' + str(inputyear) + '-' + str(inputmonth) + '-' + str(inputday) + ': \n')
+    print('Daily Total Energy Usage for ' + str(date[0]) + '-' + str(date[1]) + '-' + str(date[2]) + ': \n')
     print(str(dt['All Sources']) + " MW \n")
     print('Daily Total Energy Usage Per Energy Source: \n')
     for x, y in dt.items():
         if x not in 'Daily Total All Sources':
             print(x + ": " + str(y) + " MW (" + str(dp[x]) + "%)")
-    print('\nPeak Energy Consumption occurred at ' + peakminuteS + ', with ' + str(peakminute) + ' MW')
-    print('Peak Energy Consumption over an hour occured at hour ' + peakhourS + ', with ' + str(peakhour) + ' MW')
-
 
 
 #--------------------------------------------------------------------------------
 #Program
 
 print("Welcome to the New York State Energy Data Analyzer") #Boot-up message
+#while loop to have program running continuously
 while True:
-    user_input()
-    data = access_data()
-    analyze_data()
-    analyzed_data_print()
+    date = user_input()         #Requests user input and date the user wants to examine
+    data = access_data(date)    #Collects the data based on user input, saves it as data
+    #analyze_data(data,date)     #Analyzes the data
+    analyze_data_method2(data, date)   #Quicker analysis function not in use, explained above
     print('')
 
