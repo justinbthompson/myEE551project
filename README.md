@@ -19,19 +19,19 @@ The program will then output: <br />
 
 An example output is below:
 
-Daily Total Energy Usage for 2019-04-24: 
+Daily Total Energy Usage for 2019-04-20: 
 
-3601545.0 MW 
+3499585.0 MW 
 
 Daily Total Energy Usage Per Energy Source: 
 
-Dual Fuel: 565914.0 MW (15.71%) <br />
-Natural Gas: 438544.0 MW (12.18%) <br />
-Nuclear: 1326488.0 MW (36.83%) <br />
-Other Fossil Fuels: 345.0 MW (0.01%) <br />
-Other Renewables: 55312.0 MW (1.54%) <br />
-Wind: 275348.0 MW (7.65%) <br />
-Hydro: 939594.0 MW (26.09%) <br />
+Dual Fuel: 569157.0 MW (16.26%) <br />
+Natural Gas: 557019.0 MW (15.92%) <br />
+Nuclear: 1393077.0 MW (39.81%) <br />
+Other Fossil Fuels: 43723.0 MW (1.25%) <br />
+Other Renewables: 52199.0 MW (1.49%) <br />
+Wind: 117148.0 MW (3.35%) <br />
+Hydro: 767262.0 MW (21.92%) <br />
 
 Peak Energy Consumption occurred at 11:06, with 13241.0 MW <br />
 Peak Energy Consumption over an hour occured at hour 20, with 179357.0 MW
