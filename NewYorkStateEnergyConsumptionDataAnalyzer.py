@@ -35,7 +35,7 @@ def user_input():
     x = True
     while x is  True:
         print("Please enter the month of " + inputyear +" you want to examine \n"
-                "Choose a number between 1 and 12")
+                "Choose a number between 1 and 12 but not in the future")
         inputmonth = input("mm >")
         try:
             int(x)
@@ -49,7 +49,7 @@ def user_input():
     x = True
     while x is True:
         print("Please enter the date of " + inputyear + '-' + inputmonth + ' you want to examine \n'
-              'Choose an applicable date between 0 and 31 depending on month')
+              'Choose an applicable date between 0 and 31 depending on month and not in the future')
         inputday = input("dd >")
         try:
             int(inputday)
