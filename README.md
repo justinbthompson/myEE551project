@@ -33,7 +33,7 @@ Other Renewables: 52199.0 MW (1.49%) <br />
 Wind: 117148.0 MW (3.35%) <br />
 Hydro: 767262.0 MW (21.92%) <br />
 
-Peak Energy Consumption occurred at 11:06, with 13241.0 MW
+Peak Energy Consumption occurred at 11:06, with 13241.0 MW <br />
 Peak Energy Consumption over an hour occured at hour 20, with 179357.0 MW
 
 ## Requirments <br />
