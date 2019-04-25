@@ -37,7 +37,8 @@ def user_input():
         try:
             int(x)
             if int(inputmonth) in range(1,12):
-                x = False
+                if datetime.datetime.now() > datetime.datetime(int(inputyear), int(inputmonth), 1):
+                    x = False
         except:
             x = True
     inputmonth = inputmonth[-2:].zfill(2)
@@ -51,7 +52,9 @@ def user_input():
             int(inputday)
             try:
                 datetime.datetime(int(inputyear), int(inputmonth), int(inputday))
-                x = False
+                if datetime.datetime.now() < datetime.datetime(int(inputyear), int(inputmonth), int(inputday)):
+                    x = True
+                else: x = False
             except: x = True
         except:
             x = True
@@ -176,8 +179,7 @@ print("Welcome to the New York State Energy Data Analyzer") #Boot-up message
 #while loop to have program running continuously
 while True:
     date = user_input()         #Requests user input and date the user wants to examine
-    #data = access_data(date)    #Collects the data based on user input, saves it as data
+    data = access_data(date)    #Collects the data based on user input, saves it as data
     analyze_data(data,date)     #Analyzes the data
-    analyze_data_method2(data, date)   #Quicker analysis function not in use, explained above
+    #analyze_data_method2(data, date)   #Quicker analysis function not in use, explained above
     print('')
-
