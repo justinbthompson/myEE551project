@@ -8,7 +8,7 @@
 
 #--------------------------------------------------------------------------------
 #Import functions from function file
-from myProject.ProjectFinalCode.project_functions import *
+from myEE551projectPowerDemand.ProjectFinalCode.project_functions import *
 
 
 #--------------------------------------------------------------------------------
