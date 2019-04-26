@@ -88,11 +88,9 @@ def access_data(date):
     return data
 
 #Analyze data function is the core of this program
-#Its primary purpose is to input the data from access_data(), analyze it, and print the results
+#Its primary purpose is to input the data from access_data(), analyze it, and return the results
 #This includes finding total daily energy consumption, energy consumption per generation source, percentage by source, and peak times
-#It then outputs a print statement displaying all this information
-#It also takes date as an input to print the date information
-def analyze_data(data, date):
+def analyze_data(data):
     #Dictionary dt will be used to match a key of a generation source with a value of its total generation
     #Dictionary dp will be used to match a key of a generation source with its percentage of total generation
     #Reset dt and dp for new data set
@@ -144,17 +142,11 @@ def analyze_data(data, date):
     for x in dp: #Find percentage of total energy usage for generation source
         dp[x] = round(100*dt[x]/dt['All Sources'],2)
 
-    print('Daily Total Energy Usage for ' + str(date[0]) + '-' + str(date[1]) + '-' + str(date[2]) + ': \n')
-    print(str(dt['All Sources']) + " MW \n")
-    print('Daily Total Energy Usage Per Energy Source: \n')
-    for x, y in dt.items():
-        if x not in 'Daily Total All Sources':
-            print(x + ": " + str(y) + " MW (" + str(dp[x]) + "%)")
-    print('\nPeak Energy Consumption occurred at ' + peakminuteS + ', with ' + str(peakminute) + ' MW')
-    print('Peak Energy Consumption over an hour occured at hour ' + peakhourS + ', with ' + str(peakhour) + ' MW')
+    return dt, dp, peakhour, peakhourS, peakminute, peakminuteS
 
 
 #This function is another way to analyze the data, which is much quicker in computing time.
+#See Progress_04.1_20190422_AnalyzingDataSpeeds.py to see time difference
 #It has similar inputs as outputs as the last, but it uses pandas to analyze data.
 #I chose to use the previous function to show concepts learned in this course.
 #Since it is not in use, it does not have the full functionality as the function above.
