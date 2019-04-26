@@ -16,6 +16,8 @@ print("Welcome to the New York State Energy Data Analyzer") #Boot-up message
 #while loop to have program running continuously
 while True:
     date = user_input()         #Requests user input and date the user wants to examine
+    if isinstance(date, bool): #If user typed exit and false was returned, exit loop
+        break
     data = access_data(date)    #Collects the data based on user input, saves it as data
     dt, dp, peakhour, peakhourS, peakminute, peakminuteS = analyze_data(data)     #Analyzes the data
     #Print data found
@@ -28,4 +30,5 @@ while True:
     print('\nPeak Energy Consumption occurred at ' + peakminuteS + ', with ' + str(peakminute) + ' MW')
     print('Peak Energy Consumption over an hour occured at hour ' + peakhourS + ', with ' + str(peakhour) + ' MW')
     print('')
-
+    print('Enter a new date or type Exit in the year input to exit')
+print('Program ended. Thank you')
