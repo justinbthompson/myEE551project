@@ -18,7 +18,7 @@ from zipfile import ZipFile #To open items in zip file
 import datetime #Will be used to check if inputted day is a real day
 
 #--------------------------------------------------------------------------------
-#Functions
+#Fucntions
 
 #User input function requests input from user
 #The user will be prompted to specify a year, month, and day
@@ -33,6 +33,8 @@ def user_input():
         inputyear = input("yyyy >")
         if (inputyear == '2018') | (inputyear == '2019'):
             x = False
+        elif (inputyear == 'exit') | (inputyear == 'Exit'):
+            return False
     #Select Month
     x = True
     while x is  True:
@@ -46,7 +48,8 @@ def user_input():
                     x = False
         except:
             x = True
-    inputmonth = inputmonth[-2:].zfill(2)
+    inputmonth = inputmonth.replace(" ","") #Remove spaces
+    inputmonth = inputmonth[-2:].zfill(2) #Make two digits
     #Select day
     x = True
     while x is True:
@@ -63,7 +66,8 @@ def user_input():
             except: x = True
         except:
             x = True
-    inputday = inputday[-2:].zfill(2)
+    inputday = inputday.replace(" ","") #Remove space
+    inputday = inputday[-2:].zfill(2) #Make two digits
     return inputyear, inputmonth, inputday
 
 
