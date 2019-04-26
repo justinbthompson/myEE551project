@@ -18,7 +18,7 @@ from zipfile import ZipFile #To open items in zip file
 import datetime #Will be used to check if inputted day is a real day
 
 #--------------------------------------------------------------------------------
-#Fucntions
+#Functions
 
 #User input function requests input from user
 #The user will be prompted to specify a year, month, and day
